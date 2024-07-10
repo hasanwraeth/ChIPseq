@@ -6,7 +6,7 @@
 #BSUB -J K3
 #BSUB -e /users/reziw3/%J.err
 #BSUB -o /users/reziw3/%J.err
-module load trimgalore
+module load deeptools
 
 GEO=$(tail -n +2 SraRunTable2.txt | cut -d ',' -f 1)
 species=hs38
@@ -14,8 +14,6 @@ prefix=bwa
 
 for i in $GEO
 do
-	## trim adapter, need trim_galore be installed, here we do not do this step
-	mkdir -p fastq.trimmed
-	trim_galore -q 15 --fastqc -o fastq.trimmed/ $i.fastq
+	bamCoverage -b bam/$i.srt.markDup.bam -o bw/$i.bw --normalizeUsing CPM
 done
 
